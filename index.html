@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practicando con React</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        picture {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            width: 100px;
+        }
+
+        img {
+            box-shadow: 0 0 15px #999;
+            border-radius: 50%;
+            width: 100px;
+            height: auto;
+        }
+
+        img.disabled {
+            opacity: 0.3;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        p {
+            font-size: 18px;
+        }
+    </style>
+
+    <!-- codigo para agregar react a html -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+
+    <h1>Women in tech</h1>
+    <p>Welcome to my first HTML page!</p>
+    <p>Doing some stuff with React</p>
+    <p>This is a sample image.</p>
+
+    <!-- root element donde react va a renderizar -->
+    <div id="app"></div>
+
+    <script type="text/babel">
+
+        const $app = document.getElementById("app");
+
+        const useState = React.useState;
+
+        const AvatarFunction = props => {
+            const [enabled, setEnabled] = useState(true);
+
+            const src = `https://randomuser.me/api/portraits/women/${props.id}.jpg`;
+
+            const className = enabled ? "" : 'disabled';
+
+            return (
+                <div>
+                    <picture>
+                        <img
+                            onClick={() => setEnabled(!enabled)}
+                            className={className}
+                            src={src}>
+                        </img>
+                        <strong>{props.name}</strong>
+                    </picture >
+                </div>
+            );
+        };
+
+        // render the react component to the DOM
+        ReactDOM.render(
+            <div>
+                <AvatarFunction id={10} name="Ana"></AvatarFunction>
+                <AvatarFunction id={12} name="Flor"></AvatarFunction>
+            </div>,
+            $app
+        );
+    </script>
+</body>
+
+</html>
