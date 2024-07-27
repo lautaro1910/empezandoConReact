@@ -20,10 +20,18 @@
             width: 100px;
         }
 
+        picture.is-small {
+            width: 50px;
+        }
+
+        picture.is-large {
+            width: 200px;
+        }
+
         img {
             box-shadow: 0 0 15px #999;
             border-radius: 50%;
-            width: 100px;
+            width: 100%;
             height: auto;
         }
 
@@ -57,37 +65,77 @@
     <div id="app"></div>
 
     <script type="text/babel">
-
         const $app = document.getElementById("app");
-
         const useState = React.useState;
 
-        const AvatarFunction = props => {
+        const AvatarFunction = ({ id, name = "Nombre por defecto", size }) => {
             const [enabled, setEnabled] = useState(true);
+            const src = `https://randomuser.me/api/portraits/women/${id}.jpg`;
+            const imgClassName = enabled ? "" : 'disabled';
 
-            const src = `https://randomuser.me/api/portraits/women/${props.id}.jpg`;
+            let pictureClassName = "";
 
-            const className = enabled ? "" : 'disabled';
+            if (size === 'small') {
+                pictureClassName = "is-small";
+            }
+            else if (size === 'large') {
+                pictureClassName = "is-large";
+            }
 
             return (
                 <div>
-                    <picture>
-                        <img
-                            onClick={() => setEnabled(!enabled)}
-                            className={className}
-                            src={src}>
-                        </img>
-                        <strong>{props.name}</strong>
-                    </picture >
+                    <picture className={pictureClassName}>
+                        {
+                            //condicion para que se pase un id y sino no lo renderice
+                            // renderiza al chefsito
+                            id ? (<img
+                                onClick={() => setEnabled(!enabled)}
+                                className={imgClassName}
+                                src={src}>
+                            </img>) :
+                                (<img
+                                    onClick={() => setEnabled(!enabled)}
+                                    className={imgClassName}
+                                    src="https://randomuser.me/api/portraits/lego/8.jpg">
+                                </img>)
+                        }
+                        <strong>{enabled ? name : "Disabled"}</strong>
+                    </picture>
                 </div>
             );
         };
 
+        function Contador() {
+            const [contadorValue, contadorModify] = useState(7);
+            const [numeroDeVeces, actualizarNroVeces] = useState(0);
+
+            return (
+                <div>
+                    <span>Valor del contador: {contadorValue}</span>
+                    <p>Numero de veces que se uso el contador: {numeroDeVeces}</p>
+
+                    <button onClick={() => {
+                        contadorModify(contadorValue + 1);
+                        actualizarNroVeces(numeroDeVeces + 1);
+                    }}>Incrementar +</button>
+
+                    <button onClick={() => {
+                        contadorModify(contadorValue - 1);
+                        actualizarNroVeces(numeroDeVeces + 1);
+                    }}>Decrementar -</button>
+                </div >
+            );
+        }
+
         // render the react component to the DOM
         ReactDOM.render(
             <div>
-                <AvatarFunction id={10} name="Ana"></AvatarFunction>
+                <Contador></Contador>
+                <AvatarFunction id={10} name="Ana" size="small"></AvatarFunction>
                 <AvatarFunction id={12} name="Flor"></AvatarFunction>
+                <AvatarFunction id={12} size="large"></AvatarFunction>
+                <AvatarFunction size="large"></AvatarFunction>
+
             </div>,
             $app
         );
